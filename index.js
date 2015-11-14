@@ -2,7 +2,8 @@
   'use strict';
 
   var chalk      = require('chalk'),
-      logSymbols = require('log-symbols');
+      logSymbols = require('log-symbols'),
+      util       = require('util');
 
   var SuperDotsReporter = function(hasColors, options) {
 
@@ -36,38 +37,13 @@
       options.divider = noColor(options.divider);
     }
 
-    this.onRunStart = function() {
-      this._dotsCount = 0;
-    };
-    
-    this.onRunComplete = function() {
+    this.onRunStart = function (browsers, results) {
       if (options.divider) {
-      //  this._writeCharacter(options.divider);
+        this._writeCharacter(options.divider);
       }
     }
 
-    this.specSuccess = function() {
-      this._writeCharacter(options.icon.success);
-    };
 
-    this.specFailure = function() {
-      this._writeCharacter(options.icon.failure);
-    };
-
-    this.specSkipped = function() {
-      this._writeCharacter(options.icon.ignore);
-    };
-
-
-    this.onSpecComplete = function(browser, result) {
-      if (result.skipped) {
-        this.specSkipped(browser, result);
-      } else if (result.success) {
-        this.specSuccess(browser, result);
-      } else {
-        this.specFailure(browser, result);
-      }
-    };
 
     this._writeCharacter = function(character) {
       this._dotsCount = (1 + this._dotsCount) % options.nbDotsPerLine;
